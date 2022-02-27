@@ -120,7 +120,7 @@
                             "namespace": "openshift",
                             "name": "python:latest"
                         },
-                        "scripts": "https://raw.githubusercontent.com/yopknopixx/vishwactfd/scripts"
+                        "scripts": "https://raw.githubusercontent.com/yopknopixx/vishwactfd/main/scripts"
                     }
                 },
                 "output": {
@@ -305,7 +305,7 @@
                 }
             },
             "spec": {
-                "host": "",
+                "host": "play.vishwactf.com",
                 "to": {
                     "kind": "Service",
                     "name": "${APPLICATION_NAME}",
