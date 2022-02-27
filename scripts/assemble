@@ -1,0 +1,39 @@
+#!/bin/bash
+
+set -x
+
+set -eo pipefail
+
+# Move source files to src directory.
+
+mv /tmp/src/* .
+
+# Update pip and packaging tools to latest.
+
+pip install -U pip setuptools wheel
+pip install mysqlclient
+
+# Install Python packages.
+
+pip install -r requirements.txt
+
+for d in CTFd/plugins/*; do
+    if [ -f "$d/requirements.txt" ]; then
+        pip install -r $d/requirements.txt
+    fi
+done
+
+# Install mod_wsgi-express.
+
+pip install -U mod_wsgi
+
+# Fixup file system permissions. Normally for an S2I build we would make
+# files/directories under /opt/app-root writable by group so that the
+# application can write can do updates still when run as arbitrary user
+# ID. For CTFd we want to avoid the possibility that someone could break
+# into the application and modify source code and then trigger a restart
+# of the web server. We thus remove write access to group and others.
+# This can result in a new layer being created in the container image,
+# but removing write access is worth the extra image size.
+
+chmod -R og-w /opt/app-root
